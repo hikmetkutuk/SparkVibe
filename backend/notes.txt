@@ -19,3 +19,70 @@ dotnet sln add src/Web/Web.csproj
 dotnet add reference ../Domain/Domain.csproj
 dotnet add reference ../Application/Application.csproj
 dotnet add reference ../Infrastructure/Infrastructure.csproj
+
+------------------------------------------------------------
+
+/src
+│
+├── /Core                  # Domain (iş kuralları) katmanı
+│   ├── /Entities
+│   ├── /ValueObjects
+│   ├── /Enums
+│   ├── /Interfaces        # Domain servis kontratları
+│   ├── /Events            # Domain event'leri
+│   └── /Specifications    # Specification pattern sınıfları
+│
+├── /Application           # Uygulama katmanı (use-case'ler)
+│   ├── /DTOs
+│   ├── /Commands          # CQRS - Write işlemleri
+│   ├── /Queries           # CQRS - Read işlemleri
+│   ├── /Handlers          # Command ve Query handler'lar
+│   ├── /Interfaces        # Servis kontratları (örneğin IEmailService(e-mail, file, log, http vs.))
+│   └── /Mapping           # AutoMapper profilleri
+│
+├── /Infrastructure        # Dış dünya ile bağlantı (ORM, servis, e-posta, vb.)
+│   ├── /Persistence       # EF Core, Mongo, Dapper vs.
+│   │   ├── /Configurations
+│   │   ├── /Repositories
+│   │   └── AppDbContext.cs
+│   ├── /Services          # SMTP, SMS, FileStorage gibi dış servis adapter'ları
+│   └── /Identity          # Identity / Authentication işlemleri
+│
+├── /Web                   # API/Web arayüzü
+│   ├── /Controllers
+│   ├── /Filters           # Global exception, logging, authorization filters
+│   ├── /Middlewares
+│   ├── /Models            # Request/response modelleri (ViewModel gibi)
+│   └── Program.cs
+│
+├── /Shared                # Ortak bileşenler (common utils, constants, base classes)
+│   ├── /Exceptions
+│   ├── /Helpers
+│   ├── /Extensions
+│   ├── /Constants
+│   └── /Base              # BaseEntity, BaseSpecification vs.
+│
+├── /Tests
+│   ├── /UnitTests
+│   │   ├── Core.Tests
+│   │   ├── Application.Tests
+│   │   └── Shared.Tests
+│   └── /IntegrationTests
+│       ├── Web.Tests
+│       └── Infrastructure.Tests
+│
+└── Project.sln
+
+--------------------------------
+
+Model ➝ API için
+DTO ➝ Application için
+Entity ➝ DB için
+
+--------------------------------
+
+[API] RegisterRequestModel
+        ⬇ (Web.Mapping)
+      RegisterRequestDto
+        ⬇ (Application.Mapping)
+        User Entity
