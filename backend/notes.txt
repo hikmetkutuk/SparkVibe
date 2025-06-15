@@ -1,0 +1,13 @@
+ dotnet new sln -n SparkVibe
+
+dotnet new webapi --use-controllers -o Web
+dotnet sln add src/Web/Web.csproj
+
+dotnet new classlib -n Application
+dotnet sln add src/Application/Application.csproj
+
+dotnet new classlib -n Domain
+dotnet sln add src/Domain/Domain.csproj
+
+dotnet new classlib -n Infrastructure
+dotnet sln add src/Infrastructure/Infrastructure.csproj
