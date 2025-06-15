@@ -1,3 +1,6 @@
+using Shared.Options;
+using Microsoft.Extensions.Configuration;
+
 namespace Web;
 
 public static class DependencyInjection

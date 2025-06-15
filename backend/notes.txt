@@ -8,18 +8,23 @@ dotnet sln add src/Domain/Domain.csproj
 dotnet new classlib -n Application
 dotnet sln add src/Application/Application.csproj
 dotnet add reference ../Domain/Domain.csproj
+dotnet add reference ../Shared/Shared.csproj
 
 dotnet new classlib -n Infrastructure
 dotnet sln add src/Infrastructure/Infrastructure.csproj
 dotnet add reference ../Domain/Domain.csproj
 dotnet add reference ../Application/Application.csproj
+dotnet add reference ../Shared/Shared.csproj
 
 dotnet new webapi --use-controllers -o Web
 dotnet sln add src/Web/Web.csproj
 dotnet add reference ../Domain/Domain.csproj
 dotnet add reference ../Application/Application.csproj
 dotnet add reference ../Infrastructure/Infrastructure.csproj
+dotnet add reference ../Shared/Shared.csproj
 
+dotnet new classlib -n Shared
+dotnet sln add src/Shared/Shared.csproj
 ------------------------------------------------------------
 
 /src
