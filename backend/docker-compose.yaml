@@ -1,0 +1,50 @@
+services:
+
+  db:
+    container_name: spark-vibe-db
+    image: postgres:17.2
+    environment:
+      POSTGRES_USER: spark
+      POSTGRES_PASSWORD: spark
+      PGDATA: /data/postgres
+    volumes:
+      - ./data/db/:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U spark -d spark-vibe" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  pgadmin:
+    container_name: spark-vibe-pgadmin
+    image: dpage/pgadmin4:8.14.0
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - data-pgadmin-service:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+  
+  app:
+    container_name: spark-vibe-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=spark-vibe;Username=spark;Password=spark
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  data-pgadmin-service:
