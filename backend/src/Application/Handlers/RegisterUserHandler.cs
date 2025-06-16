@@ -12,10 +12,28 @@ public class RegisterUserHandler(UserManager<ApplicationUser> userManager, IJwtT
 {
     public async Task<TokenRefreshRequestDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var user = new ApplicationUser { UserName = request.Dto.Email, Email = request.Dto.Email };
+        var user = new ApplicationUser
+        {
+            UserName = request.Dto.Email,
+            Email = request.Dto.Email,
+            FirstName = request.Dto.FirstName,
+            LastName = request.Dto.LastName,
+            Gender = request.Dto.Gender
+        };
+
+        var existingUser = await userManager.FindByEmailAsync(request.Dto.Email);
+        if (existingUser != null)
+        {
+            throw new Exception("Email already exists");
+        }
+
         var result = await userManager.CreateAsync(user, request.Dto.Password);
 
-        if (!result.Succeeded) throw new Exception("User creation failed");
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            throw new Exception($"User creation failed: {errors}");
+        }
 
         var token = tokenGenerator.GenerateToken(user);
         var refresh = tokenGenerator.GenerateRefreshToken();
