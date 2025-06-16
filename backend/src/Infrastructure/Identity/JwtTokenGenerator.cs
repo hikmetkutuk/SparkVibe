@@ -15,7 +15,8 @@ public class JwtTokenGenerator(IConfiguration config) : IJwtTokenGenerator
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"] ?? string.Empty));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var claims = new List<Claim> { new Claim(ClaimTypes.NameIdentifier, user.Id), new Claim(ClaimTypes.Email, user.Email) };
+        var claims = new List<Claim>
+            { new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), new Claim(ClaimTypes.Email, user.Email) };
 
         var token = new JwtSecurityToken(
             issuer: config["Jwt:Issuer"],

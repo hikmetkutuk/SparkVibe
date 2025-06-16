@@ -4,6 +4,7 @@
 
 dotnet new classlib -n Domain
 dotnet sln add src/Domain/Domain.csproj
+dotnet add reference ../Shared/Shared.csproj
 
 dotnet new classlib -n Application
 dotnet sln add src/Application/Application.csproj

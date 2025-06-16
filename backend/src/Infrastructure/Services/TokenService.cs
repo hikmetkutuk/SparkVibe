@@ -42,14 +42,14 @@ public class TokenService(IConfiguration configuration) : ITokenService
     public string GenerateAccessToken(IEnumerable<Claim> claims)
     {
         var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Secret"] ?? string.Empty));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
             issuer: configuration["Jwt:Issuer"],
             audience: configuration["Jwt:Audience"],
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(15),
-            signingCredentials: creds);
+            signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
