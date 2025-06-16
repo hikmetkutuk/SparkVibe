@@ -18,7 +18,8 @@ public class RegisterUserHandler(UserManager<ApplicationUser> userManager, IJwtT
             Email = request.Dto.Email,
             FirstName = request.Dto.FirstName,
             LastName = request.Dto.LastName,
-            Gender = request.Dto.Gender
+            Gender = request.Dto.Gender,
+            CreatedAt = DateTime.UtcNow
         };
 
         var existingUser = await userManager.FindByEmailAsync(request.Dto.Email);

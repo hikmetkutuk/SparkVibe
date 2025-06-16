@@ -9,7 +9,7 @@ using Web.Models;
 namespace Web.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthController(IMediator mediator, IMapper mapper, IAuthService authService) : ControllerBase
 {
     [HttpPost("register")]
