@@ -1,5 +1,6 @@
 using Application.Commands;
 using Application.DTOs;
+using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
@@ -7,14 +8,16 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Handlers;
 
-public class RegisterUserHandler(UserManager<ApplicationUser> userManager, IJwtTokenGenerator tokenGenerator)
+public class RegisterUserHandler(
+    UserManager<ApplicationUser> userManager,
+    IJwtTokenGenerator tokenGenerator,
+    IUserNameGenerator userNameGenerator)
     : IRequestHandler<RegisterUserCommand, TokenRefreshRequestDto>
 {
     public async Task<TokenRefreshRequestDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         var user = new ApplicationUser
         {
-            UserName = request.Dto.Email,
             Email = request.Dto.Email,
             FirstName = request.Dto.FirstName,
             LastName = request.Dto.LastName,
@@ -27,6 +30,8 @@ public class RegisterUserHandler(UserManager<ApplicationUser> userManager, IJwtT
         {
             throw new Exception("Email already exists");
         }
+
+        user.UserName = await userNameGenerator.GenerateUserNameAsync(user.FirstName, user.LastName);
 
         var result = await userManager.CreateAsync(user, request.Dto.Password);
 

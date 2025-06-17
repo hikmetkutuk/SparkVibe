@@ -25,6 +25,8 @@ public static class DependencyInjection
         services.AddScoped<ITokenService>(provider => new TokenService(configuration));
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddScoped<IUserNameGenerator, UserNameGenerator>();
+
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
         services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
             {
