@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Handlers;
 
-public class LoginUserHandler(IAuthService authService, IJwtTokenGenerator tokenGenerator)
+public class LoginUserHandler(IAuthService authService, IJwtTokenGenerator tokenGenerator, ILoggerManager logger)
     : IRequestHandler<LoginUserCommand, TokenRefreshRequestDto>
 {
     public async Task<TokenRefreshRequestDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
@@ -22,6 +22,7 @@ public class LoginUserHandler(IAuthService authService, IJwtTokenGenerator token
 
         user.RefreshToken = refresh;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        logger.LogInfo($"User {user.Email} logged in successfully.");
         await authService.UpdateUserAsync(user);
 
         return new TokenRefreshRequestDto { AccessToken = token, RefreshToken = refresh };

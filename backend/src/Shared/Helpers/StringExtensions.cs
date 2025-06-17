@@ -2,7 +2,7 @@
 
 namespace Shared.Helpers;
 
-public static class StringExtensions
+public static partial class StringExtensions
 {
     public static string ToAsciiOnly(this string input)
     {
@@ -28,6 +28,9 @@ public static class StringExtensions
             sb.Append(replacements.GetValueOrDefault(ch, ch));
         }
 
-        return sb.ToString();
+        return MyRegex().Replace(sb.ToString(), "");
     }
+
+    [System.Text.RegularExpressions.GeneratedRegex(@"[^a-zA-Z0-9]")]
+    private static partial System.Text.RegularExpressions.Regex MyRegex();
 }

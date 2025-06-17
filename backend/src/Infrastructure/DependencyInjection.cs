@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Identity;
+using Infrastructure.Logging;
 using Infrastructure.Persistence.EntityFramework.Context;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
@@ -26,6 +27,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IUserNameGenerator, UserNameGenerator>();
+        services.AddScoped<ILoggerManager, LoggerManager>();
 
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
         services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>

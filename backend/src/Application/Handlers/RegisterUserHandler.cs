@@ -11,7 +11,8 @@ namespace Application.Handlers;
 public class RegisterUserHandler(
     UserManager<ApplicationUser> userManager,
     IJwtTokenGenerator tokenGenerator,
-    IUserNameGenerator userNameGenerator)
+    IUserNameGenerator userNameGenerator,
+    ILoggerManager logger)
     : IRequestHandler<RegisterUserCommand, TokenRefreshRequestDto>
 {
     public async Task<TokenRefreshRequestDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -46,6 +47,9 @@ public class RegisterUserHandler(
 
         user.RefreshToken = refresh;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+
+        logger.LogInfo($"User {user.Email} registered successfully.");
+
         await userManager.UpdateAsync(user);
 
         return new TokenRefreshRequestDto { AccessToken = token, RefreshToken = refresh };

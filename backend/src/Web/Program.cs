@@ -1,6 +1,8 @@
 using Application;
 using Infrastructure;
 using Scalar.AspNetCore;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 using Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,17 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddWeb();
+
+// Serilog
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
+    {
+        AutoRegisterTemplate = true,
+        IndexFormat = "spark-vibe-logs-{0:yyyy.MM.dd}"
+    })
+    .CreateLogger();
 
 var app = builder.Build();
 
