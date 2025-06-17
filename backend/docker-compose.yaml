@@ -39,6 +39,8 @@ services:
       - xpack.security.enabled=false
     ports:
       - "9200:9200"
+    volumes:
+      - ./data/elasticsearch/:/usr/share/elasticsearch/data
 
   kibana:
     container_name: spark-vibe-kibana
