@@ -4,6 +4,7 @@ using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using Web;
+using Web.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,9 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
     app.MapOpenApi();
 }
+
+// Exception handling
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
