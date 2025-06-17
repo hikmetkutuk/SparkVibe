@@ -1,3 +1,4 @@
+using System.Data;
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
@@ -21,6 +22,9 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection") ??
                               throw new InvalidOperationException()));
+
+        services.AddTransient<IDbConnection>(sp =>
+            new Npgsql.NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService>(provider => new TokenService(configuration));
