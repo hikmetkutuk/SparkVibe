@@ -7,7 +7,7 @@ namespace Web.Controllers;
 
 [ApiController]
 [Route("api/user")]
-public class UserController(IMediator mediator, IMapper mapper) : ControllerBase
+public class UserController(IMediator mediator) : ControllerBase
 {
     [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetUserById(Guid userId)

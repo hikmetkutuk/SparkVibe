@@ -2,6 +2,7 @@ using System.Data;
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
+using Infrastructure.Caching;
 using Infrastructure.Identity;
 using Infrastructure.Logging;
 using Infrastructure.Persistence.EntityFramework.Context;
@@ -9,8 +10,10 @@ using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Shared.Options;
 
 namespace Infrastructure;
@@ -32,8 +35,10 @@ public static class DependencyInjection
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IUserNameGenerator, UserNameGenerator>();
         services.AddSingleton<ILoggerManager, LoggerManager>();
+        services.AddScoped<IRedisCache, RedisCache>();
 
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+
         services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -42,6 +47,10 @@ public static class DependencyInjection
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+        services.Configure<RedisOptions>(
+            configuration.GetSection("Redis"));
+
         return services;
     }
 }

@@ -50,6 +50,31 @@ services:
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
   
+  redis:
+    container_name: spark-vibe-redis
+    image: redis:7.4.2
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    command: [ "redis-server", "--save", "60", "1", "--loglevel", "warning" ]
+
+  redis-insight:
+    container_name: spark-vibe-redis-insight
+    image: redis/redisinsight:2.66
+    environment:
+      - REDISINSIGHT_PASSWORD=ps
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
+    restart: unless-stopped
+  
   app:
     container_name: spark-vibe-app
     build:
