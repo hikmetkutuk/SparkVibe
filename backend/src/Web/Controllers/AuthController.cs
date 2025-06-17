@@ -31,19 +31,18 @@ public class AuthController(IMediator mediator, IMapper mapper, IAuthService aut
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh([FromBody] TokenRefreshRequestModel model)
     {
-        if (model == null || string.IsNullOrEmpty(model.AccessToken) || string.IsNullOrEmpty(model.RefreshToken))
+        if (string.IsNullOrEmpty(model.AccessToken) || string.IsNullOrEmpty(model.RefreshToken))
         {
-            return BadRequest("AccessToken ve RefreshToken gerekli.");
+            return BadRequest("AccessToken and RefreshToken are required.");
         }
-        
+
         var newTokens = await authService.RefreshTokensAsync(model.AccessToken, model.RefreshToken);
 
         if (newTokens == null)
         {
-            return Unauthorized("Token yenileme başarısız.");
+            return Unauthorized("Token refresh failed. Invalid or expired tokens.");
         }
 
         return Ok(newTokens);
     }
-
 }

@@ -15,7 +15,7 @@ public class AuthService(
 {
     public async Task<ApplicationUser> FindByEmailAsync(string email)
     {
-        return await userManager.FindByEmailAsync(email);
+        return await userManager.FindByEmailAsync(email) ?? throw new InvalidOperationException();
     }
 
     public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password)

@@ -13,10 +13,16 @@ public class JwtTokenGenerator(IConfiguration config) : IJwtTokenGenerator
 {
     public string GenerateToken(ApplicationUser user)
     {
+        ArgumentNullException.ThrowIfNull(user);
+        if (user.Email == null) throw new ArgumentNullException(nameof(user.Email), "User email cannot be null.");
+
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"] ?? string.Empty));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var claims = new List<Claim>
-            { new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), new Claim(ClaimTypes.Email, user.Email) };
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email)
+        };
 
         var token = new JwtSecurityToken(
             issuer: config["Jwt:Issuer"],
@@ -33,17 +39,23 @@ public class JwtTokenGenerator(IConfiguration config) : IJwtTokenGenerator
 
     public ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
     {
-        var tokenValidationParameters = new TokenValidationParameters
+        try
         {
-            ValidateAudience = false,
-            ValidateIssuer = false,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"] ?? string.Empty)),
-            ValidateLifetime = false
-        };
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"] ?? string.Empty)),
+                ValidateLifetime = false
+            };
 
-        var handler = new JwtSecurityTokenHandler();
-        var principal = handler.ValidateToken(token, tokenValidationParameters, out SecurityToken _);
-        return principal;
+            var handler = new JwtSecurityTokenHandler();
+            return handler.ValidateToken(token, tokenValidationParameters, out _);
+        }
+        catch (SecurityTokenException)
+        {
+            return null;
+        }
     }
 }
