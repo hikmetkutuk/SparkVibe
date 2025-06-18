@@ -4,4 +4,5 @@
 ![.Net](https://img.shields.io/static/v1?&logo=.net&label=.net&message=9&color=5b2d90&style=for-the-badge)
 ![Postgres](https://img.shields.io/static/v1?&logo=postgresql&label=postgre%20sql&message=17.2&color=336791&style=for-the-badge)
 ![Elasticsearch](https://img.shields.io/static/v1?&logo=elasticsearch&label=elasticsearch&message=8.13.4&color=ffd10b&style=for-the-badge)
+![Elasticsearch](https://img.shields.io/static/v1?&logo=redis&label=redis&message=7.4.2&color=de0031&style=for-the-badge)
 ![Docker](https://img.shields.io/static/v1?&logo=docker&label=docker&message=27.3.1&color=086dd7&style=for-the-badge)
