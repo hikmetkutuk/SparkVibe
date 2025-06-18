@@ -1,4 +1,4 @@
-using Application.DTOs;
+using Application.Features.DTOs;
 using AutoMapper;
 using Domain.Entities;
 
@@ -8,7 +8,7 @@ public class DtoMappingProfile : Profile
 {
     public DtoMappingProfile()
     {
-        CreateMap<RegisterRequestDto, ApplicationUser>()
+        CreateMap<UserRegisterRequestDto, ApplicationUser>()
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
     }
 }

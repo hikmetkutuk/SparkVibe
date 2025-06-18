@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Application.DTOs;
+using Application.Features.DTOs;
 using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;

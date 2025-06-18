@@ -1,20 +1,20 @@
 ﻿using System.Data;
-using Application.DTOs;
+using Application.Features.DTOs;
+using Application.Features.Queries;
 using Application.Interfaces;
-using Application.Queries;
 using Dapper;
 using MediatR;
 
-namespace Application.Handlers;
+namespace Application.Features.Handlers;
 
-public class GetUserByIdQueryHandler(
+public class UserByIdHandler(
     IDbConnection dbConnection,
     ILoggerManager logger,
-    IRedisCache cache) : IRequestHandler<GetUserByIdQuery, UserDto>
+    IRedisCache cache) : IRequestHandler<UserByIdQuery, UserDto>
 {
     private const string CachePrefix = "User:";
 
-    public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<UserDto> Handle(UserByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = CachePrefix + request.UserId.ToString();
         var cachedUserJson = await cache.GetAsync<string>(cacheKey);

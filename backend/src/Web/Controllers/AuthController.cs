@@ -1,5 +1,5 @@
-using Application.Commands;
-using Application.DTOs;
+using Application.Features.Commands;
+using Application.Features.DTOs;
 using Application.Interfaces;
 using AutoMapper;
 using MediatR;
@@ -15,16 +15,16 @@ public class AuthController(IMediator mediator, IMapper mapper, IAuthService aut
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequestModel model)
     {
-        var dto = mapper.Map<RegisterRequestDto>(model);
-        var response = await mediator.Send(new RegisterUserCommand(dto));
+        var dto = mapper.Map<UserRegisterRequestDto>(model);
+        var response = await mediator.Send(new UserRegisterCommand(dto));
         return Ok(response);
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequestModel model)
     {
-        var dto = mapper.Map<LoginRequestDto>(model);
-        var response = await mediator.Send(new LoginUserCommand(dto));
+        var dto = mapper.Map<UserLoginRequestDto>(model);
+        var response = await mediator.Send(new UserLoginCommand(dto));
         return Ok(response);
     }
 

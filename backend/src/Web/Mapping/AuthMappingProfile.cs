@@ -1,4 +1,4 @@
-using Application.DTOs;
+using Application.Features.DTOs;
 using AutoMapper;
 using Web.Models;
 
@@ -8,8 +8,8 @@ public class AuthMappingProfile : Profile
 {
     public AuthMappingProfile()
     {
-        CreateMap<RegisterRequestModel, RegisterRequestDto>();
-        CreateMap<LoginRequestModel, LoginRequestDto>();
+        CreateMap<RegisterRequestModel, UserRegisterRequestDto>();
+        CreateMap<LoginRequestModel, UserLoginRequestDto>();
         CreateMap<TokenRefreshRequestModel, TokenRefreshRequestDto>();
     }
 }

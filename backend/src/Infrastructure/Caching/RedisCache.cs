@@ -48,6 +48,11 @@ public class RedisCache : IRedisCache
         }
     }
 
+    public async Task RemoveAsync(string key)
+    {
+        await _database.KeyDeleteAsync(key);
+    }
+
     private class GuidConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)

@@ -1,20 +1,20 @@
 ﻿using System.Data;
-using Application.DTOs;
+using Application.Features.DTOs;
+using Application.Features.Queries;
 using Application.Interfaces;
-using Application.Queries;
 using Dapper;
 using MediatR;
 
-namespace Application.Handlers;
+namespace Application.Features.Handlers;
 
-public class GetAllUsersQueryHandler(
+public class UserListHandler(
     IDbConnection dbConnection,
     ILoggerManager logger,
-    IRedisCache cache) : IRequestHandler<GetAllUsersQuery, List<UserDto>>
+    IRedisCache cache) : IRequestHandler<UserListQuery, List<UserDto>>
 {
     private const string CacheKey = "Users:All";
 
-    public async Task<List<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    public async Task<List<UserDto>> Handle(UserListQuery request, CancellationToken cancellationToken)
     {
         var cachedUsersJson = await cache.GetAsync<string>(CacheKey);
         if (!string.IsNullOrEmpty(cachedUsersJson))

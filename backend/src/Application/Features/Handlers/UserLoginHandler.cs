@@ -1,15 +1,15 @@
-using Application.Commands;
-using Application.DTOs;
+using Application.Features.Commands;
+using Application.Features.DTOs;
 using Application.Interfaces;
 using Domain.Interfaces;
 using MediatR;
 
-namespace Application.Handlers;
+namespace Application.Features.Handlers;
 
-public class LoginUserHandler(IAuthService authService, IJwtTokenGenerator tokenGenerator, ILoggerManager logger)
-    : IRequestHandler<LoginUserCommand, TokenRefreshRequestDto>
+public class UserLoginHandler(IAuthService authService, IJwtTokenGenerator tokenGenerator, ILoggerManager logger)
+    : IRequestHandler<UserLoginCommand, TokenRefreshRequestDto>
 {
-    public async Task<TokenRefreshRequestDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<TokenRefreshRequestDto> Handle(UserLoginCommand request, CancellationToken cancellationToken)
     {
         var user = await authService.FindByEmailAsync(request.Dto.Email)
                    ?? throw new Exception("User not found");

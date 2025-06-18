@@ -1,21 +1,23 @@
-using Application.Commands;
-using Application.DTOs;
+using Application.Features.Commands;
+using Application.Features.DTOs;
+using Application.Features.Events;
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Handlers;
+namespace Application.Features.Handlers;
 
-public class RegisterUserHandler(
+public class UserRegisterHandler(
     UserManager<ApplicationUser> userManager,
     IJwtTokenGenerator tokenGenerator,
     IUserNameGenerator userNameGenerator,
+    IMediator mediator,
     ILoggerManager logger)
-    : IRequestHandler<RegisterUserCommand, TokenRefreshRequestDto>
+    : IRequestHandler<UserRegisterCommand, TokenRefreshRequestDto>
 {
-    public async Task<TokenRefreshRequestDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<TokenRefreshRequestDto> Handle(UserRegisterCommand request, CancellationToken cancellationToken)
     {
         var user = new ApplicationUser
         {
@@ -51,6 +53,7 @@ public class RegisterUserHandler(
         logger.LogInfo($"User {user.Email} registered successfully.");
 
         await userManager.UpdateAsync(user);
+        await mediator.Publish(new UserRegisterEvent(user), cancellationToken);
 
         return new TokenRefreshRequestDto { AccessToken = token, RefreshToken = refresh };
     }

@@ -1,6 +1,6 @@
-namespace Application.DTOs;
+namespace Application.Features.DTOs;
 
-public class RegisterRequestDto
+public class UserRegisterRequestDto
 {
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
