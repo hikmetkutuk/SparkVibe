@@ -16,4 +16,13 @@ public class UserController(IMediator mediator) : ControllerBase
         var user = await mediator.Send(query);
         return Ok(user);
     }
+
+    [HttpGet]
+    [Route("list")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var query = new GetAllUsersQuery();
+        var users = await mediator.Send(query);
+        return Ok(users);
+    }
 }
