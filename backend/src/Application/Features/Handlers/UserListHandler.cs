@@ -45,6 +45,7 @@ public class UserListHandler(
         }
 
         var usersJson = System.Text.Json.JsonSerializer.Serialize(users);
+        logger.LogInfo("All users loaded from database and cached successfully.");
         await cache.SetAsync(CacheKey, usersJson, TimeSpan.FromMinutes(30));
 
         return users;

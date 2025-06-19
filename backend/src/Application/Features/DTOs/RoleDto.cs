@@ -2,5 +2,6 @@
 
 public class RoleDto
 {
-    public string Name { get; set; } = string.Empty;
+    public required Guid Id { get; set; }
+    public required string Name { get; set; }
 }
