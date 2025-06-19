@@ -24,8 +24,7 @@ public class UserRegisterHandler(
             Email = request.Dto.Email,
             FirstName = request.Dto.FirstName,
             LastName = request.Dto.LastName,
-            Gender = request.Dto.Gender,
-            CreatedAt = DateTime.UtcNow
+            Gender = request.Dto.Gender
         };
 
         var existingUser = await userManager.FindByEmailAsync(request.Dto.Email);
@@ -41,6 +40,7 @@ public class UserRegisterHandler(
         if (!result.Succeeded)
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            logger.LogError($"User creation failed: {errors}");
             throw new Exception($"User creation failed: {errors}");
         }
 

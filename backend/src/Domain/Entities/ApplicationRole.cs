@@ -1,14 +1,14 @@
-﻿namespace Shared.Base;
+﻿using Microsoft.AspNetCore.Identity;
+using Shared.Base;
 
-public abstract class BaseEntity<TKey>
+namespace Domain.Entities;
+
+public class ApplicationRole : IdentityRole<Guid>, IBaseEntity<Guid>
 {
-    public required TKey Id { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string? CreatedByUserId { get; set; }
-
     public DateTime? ModifiedAt { get; set; }
     public string? ModifiedByUserId { get; set; }
-
     public bool IsActive { get; set; } = true;
-    public bool Deleted { get; set; } = false;
+    public bool Deleted { get; set; }
 }

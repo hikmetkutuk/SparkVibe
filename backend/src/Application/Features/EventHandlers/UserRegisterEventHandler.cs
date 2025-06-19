@@ -16,11 +16,11 @@ public class UserRegisterEventHandler(IRedisCache cache, ILoggerManager logger)
         var dto = new UserDto
         {
             Id = user.Id,
-            Email = user.Email,
+            Email = user.Email!,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Gender = user.Gender,
-            UserName = user.UserName
+            UserName = user.UserName!
         };
 
         var json = System.Text.Json.JsonSerializer.Serialize(dto);

@@ -29,11 +29,11 @@ public sealed class EntityInterceptor(ICurrentUserService currentUserService) : 
         if (context is null)
             return;
 
-        foreach (var entry in context.ChangeTracker.Entries<BaseEntity>())
+        foreach (var entry in context.ChangeTracker.Entries<BaseEntity<Guid>>())
         {
             if (entry.State is EntityState.Added or EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                var utcNow = DateTimeOffset.UtcNow;
+                var utcNow = DateTime.UtcNow;
 
                 if (entry.State == EntityState.Added)
                 {
